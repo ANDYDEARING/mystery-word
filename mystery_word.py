@@ -69,6 +69,10 @@ def play_game(mystery_word):
         print("letters you've guessed already", already_guessed_list)
         print("")
         guess = input("Take a guess: ")
+        while (not guess.isalpha()) or (len(guess) != 1):
+            guess = input("Please guess a single letter (a-z): ")
+        print(guess)
+
         end_of_game = True
         
     
