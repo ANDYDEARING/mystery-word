@@ -42,7 +42,7 @@ def get_word_list(difficulty_int):
         difficulty_range = range(8,100)
     with open("words.txt", "r") as word_file:
         game_word_list = [
-            word
+            word.strip()
             for word in word_file.readlines()
             if len(word) in difficulty_range
         ]
@@ -53,7 +53,6 @@ def play_game(mystery_word):
     """plays a game of mystery word, accepting a string of the mystery word,
      returns bool play_again"""
     
-    mystery_word = mystery_word.strip()
     mystery_word_list = []
     for char in mystery_word:
         mystery_word_list.append(char.lower())
