@@ -20,8 +20,10 @@ def start_game():
             mode_choice = int(input("Choose (1-4) "))
         except:
             pass
-        if mode_choice in range(1,6):
+        if mode_choice in range(1,5):
             return mode_choice
+        elif mode_choice == 5:
+            exit()
         else:
             print("Invalid Entry, try again")
 
