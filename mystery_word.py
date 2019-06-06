@@ -57,6 +57,8 @@ def play_game(mystery_word):
     for char in mystery_word:
         mystery_word_list.append(char.lower())
     
+    print("DEBUG", mystery_word_list)
+
     end_of_game = False
     mystery_line = "_ " * len(mystery_word_list)
     wrong_answers_remaining = 8
@@ -65,13 +67,13 @@ def play_game(mystery_word):
         print("")
         print(mystery_line)
         print("")
-        print("wrong answers left: ", wrong_answers_remaining)
+        print("wrong answers left:", wrong_answers_remaining)
         print("letters you've guessed already", already_guessed_list)
         print("")
         guess = input("Take a guess: ")
-        while (not guess.isalpha()) or (len(guess) != 1):
-            guess = input("Please guess a single letter (a-z): ")
-        print(guess)
+        
+        while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
+            guess = input("Please guess a single letter (a-z) not already guessed: ")
 
         end_of_game = True
         
