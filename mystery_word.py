@@ -57,8 +57,15 @@ def play_game(mystery_word):
     mystery_word_list = []
     for char in mystery_word:
         mystery_word_list.append(char.lower())
-
-    print(mystery_word_list)
+    
+    end_of_game = False
+    mystery_line = "_ " * len(mystery_word_list)
+    while not end_of_game:
+        print("")
+        print(mystery_line)
+        guess = input("Take a guess: ")
+        end_of_game = True
+        
     
     return play_again_query()
 
