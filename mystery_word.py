@@ -59,9 +59,15 @@ def play_game(mystery_word):
     
     end_of_game = False
     mystery_line = "_ " * len(mystery_word_list)
+    wrong_answers_remaining = 8
+    already_guessed_list = []
     while not end_of_game:
         print("")
         print(mystery_line)
+        print("")
+        print("wrong answers left: ", wrong_answers_remaining)
+        print("letters you've guessed already", already_guessed_list)
+        print("")
         guess = input("Take a guess: ")
         end_of_game = True
         
