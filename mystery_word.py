@@ -27,6 +27,7 @@ def start_game():
         else:
             print("Invalid Entry, try again")
 
+# get a word list for the selected difficulty
 def get_word_list(difficulty_int):
     """Reads from words.txt locally and returns a word list based on 
     difficulty where 1 is 4-6 letters long, 2 is 6-8 letters long,
@@ -49,9 +50,16 @@ def get_word_list(difficulty_int):
 
 # main game function
 def play_game(mystery_word):
-    """plays a game of mystery word, returns bool play_again"""
-    print("regular game")
-    print(mystery_word)
+    """plays a game of mystery word, accepting a string of the mystery word,
+     returns bool play_again"""
+    
+    mystery_word = mystery_word.strip()
+    mystery_word_list = []
+    for char in mystery_word:
+        mystery_word_list.append(char.lower())
+
+    print(mystery_word_list)
+    
     return play_again_query()
 
 # evil mode function
@@ -73,7 +81,7 @@ def play_again_query():
         play_again = False
     return play_again
 
-# initialize the game
+# initialize and run the game till exit
 while True:
     mode_select = (start_game())
     game_list = get_word_list(mode_select)
@@ -85,5 +93,3 @@ while True:
         play_again = play_evil_mode(game_list)
         if not play_again:
             exit()
-    else:
-        exit()
