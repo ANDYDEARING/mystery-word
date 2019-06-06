@@ -109,7 +109,8 @@ def play_game(mystery_word):
         
         while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
             guess = input("Please guess a single letter (a-z) not already guessed: ")
-        already_guessed_list.append(guess.lower())
+        guess = guess.lower()
+        already_guessed_list.append(guess)
         if guess in mystery_word_list:
             mystery_word_list, end_of_game = the_chimera(already_guessed_list, mystery_word_list, display=False)
             print(mystery_word_list, "in main")
@@ -120,7 +121,7 @@ def play_game(mystery_word):
             wrong_answers_remaining -= 1
             if wrong_answers_remaining == 0:
                 print("Sorry, you lose.")
-                end_of_game = False
+                end_of_game = True
     
     return play_again_query()
 
