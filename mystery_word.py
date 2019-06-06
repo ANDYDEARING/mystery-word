@@ -13,7 +13,7 @@ def start_game():
     print("4. Evil Mode")
     print("5. Quit")
     mode_choice = None
-    # get the choice as long as the input is valid
+    # return the choice as long as the input is valid
     while True:
         try:
             mode_choice = int(input("Choose (1-4) "))
@@ -24,11 +24,31 @@ def start_game():
         else:
             print("Invalid Entry, try again")
 
-mode_select = (start_game())
+def get_word_list(difficulty_int):
+    """Reads from words.txt locally and returns a word list based on 
+    difficulty where 1 is 4-6 letters long, 2 is 6-8 letters long,
+    and 3 or more is 8 or more letters long"""
+    if difficulty_int == 1:
+        difficulty_range = range(4,7)
+    elif difficulty_int == 2:
+        difficulty_range = range(6,9)
+    else:
+        # 100 is more than enough for the longest word in english 
+        # (45 at the moment)
+        difficulty_range = range(8,100)
+    with open("words.txt", "r") as word_file:
+        game_word_list = [
+            word
+            for word in word_file.readlines()
+            if len(word) in difficulty_range
+        ]
+    return game_word_list
 
+mode_select = (start_game())
+game_list = get_word_list(mode_select)
+print(game_list[12:20])
 # initialize the game
-with open("words.txt", "r") as word_file:
-    wordlist = word_file.readlines()
+
 
 # play the game
 
