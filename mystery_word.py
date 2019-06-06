@@ -74,9 +74,16 @@ def play_game(mystery_word):
         
         while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
             guess = input("Please guess a single letter (a-z) not already guessed: ")
-
-        end_of_game = True
-        
+        already_guessed_list.append(guess)
+        if guess in mystery_word_list:
+            print("You Win!")
+            end_of_game = True
+        else:
+            print("It's not there...")
+            wrong_answers_remaining -= 1
+            if wrong_answers_remaining == 0:
+                print("Sorry, you lose.")
+                end_of_game = False
     
     return play_again_query()
 
