@@ -48,6 +48,35 @@ def get_word_list(difficulty_int):
         ]
     return game_word_list
 
+def the_chimera(guess_list, mystery_list, display=True):
+    """takes two lists of single letters, the first of guesses,
+    the second is of the target mystery word, where letters not
+    guessed yet are lower case and guessed letters are upper case,
+    printing the line if display=True, and returning a boolean of game_won"""
+
+    for letter in mystery_list:
+        if letter in guess_list:
+            letter = letter.upper()
+    
+    display_list = []
+    game_won = False
+
+    for letter in mystery_list:
+        if letter == letter.upper():
+            display_list.append(letter)
+        else:
+            display_list.append("_")
+    if "_" not in display_list:
+        game_won = True
+    if display == True:
+        display_str = ""
+        for letter in display_list:
+            display_str += letter + " "
+        print(display_str)
+
+    return game_won
+
+
 # main game function
 def play_game(mystery_word):
     """plays a game of mystery word, accepting a string of the mystery word,
@@ -60,12 +89,11 @@ def play_game(mystery_word):
     print("DEBUG", mystery_word_list)
 
     end_of_game = False
-    mystery_line = "_ " * len(mystery_word_list)
     wrong_answers_remaining = 8
     already_guessed_list = []
     while not end_of_game:
         print("")
-        print(mystery_line)
+        print(the_chimera(already_guessed_list, mystery_word_list, display=True))
         print("")
         print("wrong answers left:", wrong_answers_remaining)
         print("letters you've guessed already", already_guessed_list)
@@ -74,10 +102,11 @@ def play_game(mystery_word):
         
         while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
             guess = input("Please guess a single letter (a-z) not already guessed: ")
-        already_guessed_list.append(guess)
+        already_guessed_list.append(guess.lower())
         if guess in mystery_word_list:
-            print("You Win!")
-            end_of_game = True
+            end_of_game = the_chimera(already_guessed_list, mystery_word_list, display=False)
+            if end_of_game:
+                print("YOU WIN!")
         else:
             print("It's not there...")
             wrong_answers_remaining -= 1
