@@ -47,11 +47,43 @@ def get_word_list(difficulty_int):
         ]
     return game_word_list
 
+# main game function
+def play_game(mystery_word):
+    """plays a game of mystery word, returns bool play_again"""
+    print("regular game")
+    print(mystery_word)
+    return play_again_query()
+
+# evil mode function
+def play_evil_mode(evil_word_list):
+    """plays the evil mode of mystery word, returns bool play_again"""
+    print("Coming soon!")
+    return play_again_query()
+
+# play again function
+def play_again_query():
+    """asks the user if they want to play again and returns a bool"""
+    play_again_str = input("Play Again?(y/n) ")
+    try:
+        if play_again_str[0].lower() == "y":
+            play_again = True
+        else:
+            play_again = False
+    except:
+        play_again = False
+    return play_again
+
 # initialize the game
-mode_select = (start_game())
-game_list = get_word_list(mode_select)
-print(game_list[random.randrange(len(game_list))])
-
-# play the game
-
-# choose the word
+while True:
+    mode_select = (start_game())
+    game_list = get_word_list(mode_select)
+    if mode_select < 4:
+        play_again = play_game(game_list[random.randrange(len(game_list))])
+        if not play_again:
+            exit()
+    elif mode_select == 4:
+        play_again = play_evil_mode(game_list)
+        if not play_again:
+            exit()
+    else:
+        exit()
