@@ -12,6 +12,8 @@ def start_game():
     print("3. Hard (8+ letters)")
     print("4. Evil Mode")
     print("5. Quit")
+    mode_choice = None
+    # get the choice as long as the input is valid
     while True:
         try:
             mode_choice = int(input("Choose (1-4) "))
@@ -21,7 +23,8 @@ def start_game():
             return mode_choice
         else:
             print("Invalid Entry, try again")
-print(start_game())
+
+mode_select = (start_game())
 
 # initialize the game
 with open("words.txt", "r") as word_file:
