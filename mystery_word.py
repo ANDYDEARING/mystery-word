@@ -13,7 +13,10 @@ def start_game():
     print("4. Evil Mode")
     print("5. Quit")
     while True:
-        mode_choice = int(input("Choose (1-4) "))
+        try:
+            mode_choice = int(input("Choose (1-4) "))
+        except:
+            pass
         if mode_choice in range(1,6):
             return mode_choice
         else:
