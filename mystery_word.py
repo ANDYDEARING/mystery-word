@@ -1,3 +1,4 @@
+import random
 
 # function to start game
 def start_game():
@@ -44,11 +45,10 @@ def get_word_list(difficulty_int):
         ]
     return game_word_list
 
+# initialize the game
 mode_select = (start_game())
 game_list = get_word_list(mode_select)
-print(game_list[12:20])
-# initialize the game
-
+print(game_list[random.randrange(len(game_list))])
 
 # play the game
 
