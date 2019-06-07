@@ -47,7 +47,7 @@ def get_word_list(difficulty_int, file="words.txt"):
                 "What's the maximum letter length you want to try? "))
         except:
             chosen_character_length = 100
-        difficulty_range = range(1,chosen_character_length)
+        difficulty_range = range(1,chosen_character_length+1)
     
     with open(file, "r") as word_file:
         # add only stripped, lowercase versions of words of legal
@@ -154,21 +154,29 @@ def make_evil_template(evil_words_list):
     """returns an evil word template of random length, accepting an evil_words_list
     and choosing the word length that maximizes potential words, which it then uses
     to return a template of that length"""
+
+    # default value
     max_words_in_length_of = 1
     word_length_freq = {}
+
+    # iterate through the words list and sort by frequency of length, 
+    # discovering the highest and storing it in max_words_in_length_of
     for word in evil_words_list:
         try:
             word_length_freq[len(word)] += 1
         except:
             word_length_freq[len(word)] = 1
+    
     def get_frequency_value(word_tup):
         """Given a tuple, returns the second value"""
         return word_tup[1]
+    
     max_words_in_length_of = sorted(
         word_length_freq.items(), key=get_frequency_value, reverse = True)[0][0]
-    print("evil template length", max_words_in_length_of)
+    
+    # make a template of length max_words_in_length_of
     evil_word_template = []
-    for _ in range(max_words_in_length_of+1):
+    for _ in range(max_words_in_length_of):
         evil_word_template.append("_")
     return evil_word_template
 
