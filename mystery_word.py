@@ -120,6 +120,7 @@ def play_game(mystery_word):
             mystery_word_list, end_of_game = the_chimera(already_guessed_list, mystery_word_list, display=False)
             # print(mystery_word_list, "in main")
             if end_of_game:
+                the_chimera(already_guessed_list, mystery_word_list, display=True)
                 print("YOU WIN!")
         else:
             print("\a")
