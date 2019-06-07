@@ -53,6 +53,8 @@ def get_word_list(difficulty_int):
         ]
     return game_word_list
 
+# cool sounding function that both displays the word in partially
+# guessed form (if display=True) and checks if the game has been won
 def the_chimera(guess_list, mystery_list, display=True):
     """takes two lists of single letters, the first of guesses,
     the second is of the target mystery word, where letters not
@@ -137,6 +139,7 @@ def play_evil_mode(evil_word_list):
 def play_again_query():
     """asks the user if they want to play again and returns a bool"""
     play_again_str = input("Play Again?(y/n) ")
+    # any answer that starts with a "y" or "Y" is "yes", otherwise "no"
     try:
         if play_again_str[0].lower() == "y":
             play_again = True
@@ -150,10 +153,12 @@ def play_again_query():
 while True:
     mode_select = (start_game())
     game_list = get_word_list(mode_select)
+    # if the user is playing on regular, select a random word
     if mode_select < 4:
         play_again = play_game(game_list[random.randrange(len(game_list))])
         if not play_again:
             exit()
+    # if the user is playing on evil mode, pass the list of potential words
     elif mode_select == 4:
         play_again = play_evil_mode(game_list)
         if not play_again:
