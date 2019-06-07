@@ -95,8 +95,13 @@ def the_chimera(guess_list, mystery_list, display=True):
 
 # "cut off one head, and two more take its place"
 # this is the equivalent of the_chimera for evil mode
-def the_hydra(guess_list, mystery_template, mystery_words_list, display=True):
-    pass
+def the_hydra(guess_list, mystery_template, mystery_words_list):
+    """accepts a guess_list, mystery_template, and mystery_words_list,
+    returning a new mystery_template, new mystery_words_list, and the
+    number of words eliminated on that step. Logic is to maximize remaining
+    words, given a guess."""
+    number_of_words_eliminated = 9
+    return mystery_template, mystery_words_list, number_of_words_eliminated
 
 # main game function
 def play_game(mystery_word):
@@ -191,6 +196,7 @@ def play_evil_mode(evil_words_list):
     wrong_answers_remaining = 8
     already_guessed_list = []
     words_eliminated = 0
+    remaining_mystery_words = evil_words_list
     while not end_of_game:
         os.system("clear")
         print("")
@@ -199,13 +205,18 @@ def play_evil_mode(evil_words_list):
         print("wrong answers left:", wrong_answers_remaining)
         print("letters you've guessed already", already_guessed_list)
         print("")
-        print("Evil mode console:", len(evil_words_list), "remaining,", words_eliminated, "eliminated.")
+        print("Evil mode console:", len(evil_words_list), "words remaining.")
+        print(words_eliminated, "words eliminated on previous step.")
+        print("")
         guess = input("Guess a single letter (a-z): ")
         
         while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
             guess = input("Please guess a single letter (a-z) not already guessed: ")
         guess = guess.lower()
         already_guessed_list.append(guess)
+
+        mystery_word_template, remaining_mystery_words, words_eliminated = the_hydra(
+            already_guessed_list, mystery_word_template, remaining_mystery_words)
 
         # logic breakpoint
         # if guess in mystery_word_list:
