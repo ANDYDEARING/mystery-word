@@ -154,7 +154,7 @@ def play_again_query():
 while True:
     mode_select = (start_game())
 
-    # anything that starts with an f uses fun_words.txt, otherwise words.txt
+    # anything that starts with an f or F uses fun_words.txt, otherwise words.txt
     word_list_str = input("Which word list would you like to use, Fun or School? ")
     word_file = "words.txt"
     try:
