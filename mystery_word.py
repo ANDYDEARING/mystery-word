@@ -39,9 +39,15 @@ def get_word_list(difficulty_int, file="words.txt"):
     elif difficulty_int == 2:
         difficulty_range = range(6,9)
     else:
-        # 100 is more than enough for the longest word in english 
-        # (45 at the moment)
-        difficulty_range = range(8,100)
+        # evil mode prompt
+        print("Feeling brave I see...")
+        chosen_character_length = 0
+        try:
+            chosen_character_length = int(input(
+                "What's the maximum letter length you want to try? "))
+        except:
+            chosen_character_length = 100
+        difficulty_range = range(:chosen_character_length)
     
     with open(file, "r") as word_file:
         # add only stripped, lowercase versions of words of legal
@@ -87,6 +93,10 @@ def the_chimera(guess_list, mystery_list, display=True):
 
     return new_mystery_list, game_won
 
+# "cut off one head, and two more take its place"
+# this is the equivalent of the_chimera for evil mode
+def the_hydra(guess_list, mystery_template, mystery_words_list, display=True):
+    pass
 
 # main game function
 def play_game(mystery_word):
@@ -130,10 +140,60 @@ def play_game(mystery_word):
                 end_of_game = True
     return play_again_query()
 
+# display funcion for the evil mode
+def evil_display(mystery_word_template):
+    """takes the mystery word template as an argument and displays it"""
+    display_str = ""
+    for char in mystery_word_template:
+        display_str += char + " "
+    print(display_str)
+    return None
+
+# makes a blank word template for evil mode
+def make_evil_template():
+    """returns an evil word template of random length"""
+    return ["_", "_", "_"]
+
 # evil mode function
-def play_evil_mode(evil_word_list):
+def play_evil_mode(evil_words_list):
     """plays the evil mode of mystery word, returns bool play_again"""
-    print("Coming soon!")
+    # mystery_word_list = []
+    # for char in mystery_word:
+    #     mystery_word_list.append(char.lower())
+    mystery_word_template = make_evil_template()
+    end_of_game = False
+    wrong_answers_remaining = 8
+    already_guessed_list = []
+    words_eliminated = 0
+    while not end_of_game:
+        os.system("clear")
+        print("")
+        evil_display(mystery_word_template)
+        print("")
+        print("wrong answers left:", wrong_answers_remaining)
+        print("letters you've guessed already", already_guessed_list)
+        print("")
+        print("Evil mode console:", len(evil_words_list), "remaining,", words_eliminated, "eliminated.")
+        guess = input("Guess a single letter (a-z): ")
+        
+        while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
+            guess = input("Please guess a single letter (a-z) not already guessed: ")
+        guess = guess.lower()
+        already_guessed_list.append(guess)
+
+        # logic breakpoint
+        # if guess in mystery_word_list:
+        #     mystery_word_list, end_of_game = the_chimera(already_guessed_list, mystery_word_list, display=False)
+        #     if end_of_game:
+        #         the_chimera(already_guessed_list, mystery_word_list, display=True)
+        #         print("YOU WIN!")
+        # else:
+        #     print("\a")
+        #     wrong_answers_remaining -= 1
+        #     if wrong_answers_remaining == 0:
+        #         print("Sorry, you lose. The word was", mystery_word.upper(), "!")
+        #         end_of_game = True
+
     return play_again_query()
 
 # play again function
