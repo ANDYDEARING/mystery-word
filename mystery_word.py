@@ -1,9 +1,11 @@
 import random
+import os
 
 # function to start game
 def start_game():
     """Starts the game by asking user for the desired mode and returns
     an int for which mode they select"""
+    os.system("clear")
     print("")
     print("Welcome to MYSTERY WORD")
     print("Select mode:")
@@ -42,18 +44,13 @@ def get_word_list(difficulty_int):
         difficulty_range = range(8,100)
     
     with open("words.txt", "r") as word_file:
-        # print("DEBUG first length", len(word_file.readline()))
+        # add only stripped, lowercase versions of words of legal
+        # lengths to the list
         game_word_list = [
             word.strip().lower()
             for word in word_file.readlines()
             if len(word.strip()) in difficulty_range
         ]
-        # game_word_list = []
-        # for word in word_file.readlines():
-        #     if len(word.strip()) in difficulty_range:
-        #         game_word_list.append(word.strip().lower())
-        # print("Debug first word:", game_word_list[0])
-
     return game_word_list
 
 def the_chimera(guess_list, mystery_list, display=True):
@@ -104,6 +101,7 @@ def play_game(mystery_word):
     wrong_answers_remaining = 8
     already_guessed_list = []
     while not end_of_game:
+        os.system("clear")
         print("")
         the_chimera(already_guessed_list, mystery_word_list, display=True)
         print("")
