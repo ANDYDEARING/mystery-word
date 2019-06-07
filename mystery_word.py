@@ -40,12 +40,20 @@ def get_word_list(difficulty_int):
         # 100 is more than enough for the longest word in english 
         # (45 at the moment)
         difficulty_range = range(8,100)
+    
     with open("words.txt", "r") as word_file:
+        # print("DEBUG first length", len(word_file.readline()))
         game_word_list = [
-            word.strip()
+            word.strip().lower()
             for word in word_file.readlines()
-            if len(word) in difficulty_range
+            if len(word.strip()) in difficulty_range
         ]
+        # game_word_list = []
+        # for word in word_file.readlines():
+        #     if len(word.strip()) in difficulty_range:
+        #         game_word_list.append(word.strip().lower())
+        # print("Debug first word:", game_word_list[0])
+
     return game_word_list
 
 def the_chimera(guess_list, mystery_list, display=True):
@@ -61,10 +69,7 @@ def the_chimera(guess_list, mystery_list, display=True):
             new_mystery_list.append(letter.upper())
         else:
             new_mystery_list.append(letter)
-            # print(letter, "chimera, caps?")
-    # print(new_mystery_list, "chimera, changed?")
 
-    
     display_list = []
     game_won = False
 
@@ -93,7 +98,7 @@ def play_game(mystery_word):
     for char in mystery_word:
         mystery_word_list.append(char.lower())
     
-    print("DEBUG", mystery_word_list)
+    # print("DEBUG", mystery_word_list)
 
     end_of_game = False
     wrong_answers_remaining = 8
@@ -120,9 +125,8 @@ def play_game(mystery_word):
             print("It's not there...")
             wrong_answers_remaining -= 1
             if wrong_answers_remaining == 0:
-                print("Sorry, you lose.")
+                print("Sorry, you lose. The word was", mystery_word.upper(), "!")
                 end_of_game = True
-    
     return play_again_query()
 
 # evil mode function
