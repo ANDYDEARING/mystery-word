@@ -118,7 +118,7 @@ def play_game(mystery_word):
         already_guessed_list.append(guess)
         if guess in mystery_word_list:
             mystery_word_list, end_of_game = the_chimera(already_guessed_list, mystery_word_list, display=False)
-            print(mystery_word_list, "in main")
+            # print(mystery_word_list, "in main")
             if end_of_game:
                 print("YOU WIN!")
         else:
