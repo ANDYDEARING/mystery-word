@@ -102,10 +102,25 @@ def evil_win(evil_template):
     else:
         return True
 
+# check to see if a template is compatible with a word
+def is_compatible(evil_template, word):
+    """accepts a template and a string word, returning a boolean that
+    says True if they're compatible and False if they're not"""
+    compatible = True
+    word_as_list = []
+    for char in word:
+        word_as_list.append(char)
+    if len(evil_template) != len(word_as_list):
+        return False
+    for index in range(len(evil_template)):
+        if (word_as_list[index] != evil_template[index]) and (evil_template[index] != "_"):
+            compatible = False
+    return compatible
+
 # "cut off one head, and two more take its place"
 # this is the equivalent of the_chimera for evil mode
-def the_hydra(guess_list, mystery_template, mystery_words_list):
-    """accepts a guess_list, mystery_template, and mystery_words_list,
+def the_hydra(guess, mystery_template, mystery_words_list):
+    """accepts the latest guess, the mystery_template, and mystery_words_list,
     returning a new mystery_template, new mystery_words_list, and the
     number of words eliminated on that step. Logic is to maximize remaining 
     words, given a guess."""
@@ -226,14 +241,12 @@ def play_evil_mode(evil_words_list):
         print(words_eliminated, "words eliminated on previous step.")
         print("")
         guess = input("Guess a single letter (a-z): ")
-        breakpoint()
         while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
             guess = input("Please guess a single letter (a-z) not already guessed: ")
         guess = guess.lower()
         already_guessed_list.append(guess)
-
         mystery_word_template, remaining_mystery_words, words_eliminated = the_hydra(
-            already_guessed_list, mystery_word_template, remaining_mystery_words)
+            guess, mystery_word_template, remaining_mystery_words)
         
         if evil_win(mystery_word_template):
             end_of_game = True
@@ -245,22 +258,8 @@ def play_evil_mode(evil_words_list):
             print("\a")
             wrong_answers_remaining -= 1
             if wrong_answers_remaining == 0:
-                print("You never had a chance. The word was", evil_words_list[0], "!")
+                print("You never had a chance. The word was", remaining_mystery_words[0], "!")
                 end_of_game = True
-
-        # logic breakpoint
-        # if guess in mystery_word_list:
-        #     mystery_word_list, end_of_game = the_chimera(already_guessed_list, mystery_word_list, display=False)
-        #     if end_of_game:
-        #         the_chimera(already_guessed_list, mystery_word_list, display=True)
-        #         print("YOU WIN!")
-        # else:
-        #     print("\a")
-        #     wrong_answers_remaining -= 1
-        #     if wrong_answers_remaining == 0:
-        #         print("Sorry, you lose. The word was", mystery_word.upper(), "!")
-        #         end_of_game = True
-
     return play_again_query()
 
 # play again function
