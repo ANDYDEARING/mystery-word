@@ -122,7 +122,7 @@ def play_game(mystery_word):
             if end_of_game:
                 print("YOU WIN!")
         else:
-            print("It's not there...")
+            print("\a")
             wrong_answers_remaining -= 1
             if wrong_answers_remaining == 0:
                 print("Sorry, you lose. The word was", mystery_word.upper(), "!")
@@ -152,7 +152,7 @@ def play_again_query():
 # initialize and run the game till exit
 while True:
     mode_select = (start_game())
-    
+
     # anything that starts with an f uses fun_words.txt, otherwise words.txt
     word_list_str = input("Which word list would you like to use, Fun or School? ")
     word_file = "words.txt"
