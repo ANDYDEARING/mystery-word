@@ -195,18 +195,25 @@ def make_evil_template(evil_words_list):
         evil_word_template.append("_")
     return evil_word_template
 
+# eliminate all members of a list that are not the passed length
+def trunc_evil_list(evil_words_list, length):
+    """accepts a word_list and a length, returning a new list of items
+    from the old list with the passed length"""
+    new_list = []
+    for word in evil_words_list:
+        if len(word) == length:
+            new_list.append(word)
+    return new_list
+
 # evil mode function
 def play_evil_mode(evil_words_list):
     """plays the evil mode of mystery word, returns bool play_again"""
-    # mystery_word_list = []
-    # for char in mystery_word:
-    #     mystery_word_list.append(char.lower())
     mystery_word_template = make_evil_template(evil_words_list)
     end_of_game = False
     wrong_answers_remaining = 8
     already_guessed_list = []
     words_eliminated = 0
-    remaining_mystery_words = evil_words_list
+    remaining_mystery_words = trunc_evil_list(evil_words_list, len(mystery_word_template))
     while not end_of_game:
         os.system("clear")
         print("")
@@ -215,11 +222,11 @@ def play_evil_mode(evil_words_list):
         print("wrong answers left:", wrong_answers_remaining)
         print("letters you've guessed already", already_guessed_list)
         print("")
-        print("Evil mode console:", len(evil_words_list), "words remaining.")
+        print("Evil mode console:", len(remaining_mystery_words), "words remaining.")
         print(words_eliminated, "words eliminated on previous step.")
         print("")
         guess = input("Guess a single letter (a-z): ")
-        
+        breakpoint()
         while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
             guess = input("Please guess a single letter (a-z) not already guessed: ")
         guess = guess.lower()
