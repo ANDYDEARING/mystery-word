@@ -93,14 +93,24 @@ def the_chimera(guess_list, mystery_list, display=True):
 
     return new_mystery_list, game_won
 
+# checks an evil template for win condition
+def evil_win(evil_template):
+    """accepts an evil template and checks if it is complete, returning True
+    if it is"""
+    if "_" in evil_template:
+        return False
+    else:
+        return True
+
 # "cut off one head, and two more take its place"
 # this is the equivalent of the_chimera for evil mode
 def the_hydra(guess_list, mystery_template, mystery_words_list):
     """accepts a guess_list, mystery_template, and mystery_words_list,
     returning a new mystery_template, new mystery_words_list, and the
-    number of words eliminated on that step. Logic is to maximize remaining
+    number of words eliminated on that step. Logic is to maximize remaining 
     words, given a guess."""
-    number_of_words_eliminated = 9
+    number_of_words_eliminated = 0
+
     return mystery_template, mystery_words_list, number_of_words_eliminated
 
 # main game function
@@ -217,6 +227,19 @@ def play_evil_mode(evil_words_list):
 
         mystery_word_template, remaining_mystery_words, words_eliminated = the_hydra(
             already_guessed_list, mystery_word_template, remaining_mystery_words)
+        
+        if evil_win(mystery_word_template):
+            end_of_game = True
+            evil_display(mystery_word_template)
+            print("YOU BEAT ME!!!")
+            print("THAT'S IMPOSSIBLE!!!")
+            print("NOOOOOOOOO!!!!!")
+        else:
+            print("\a")
+            wrong_answers_remaining -= 1
+            if wrong_answers_remaining == 0:
+                print("You never had a chance. The word was", evil_words_list[0], "!")
+                end_of_game = True
 
         # logic breakpoint
         # if guess in mystery_word_list:
