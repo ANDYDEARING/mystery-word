@@ -152,9 +152,24 @@ def evil_display(mystery_word_template):
 # makes a blank word template for evil mode
 def make_evil_template(evil_words_list):
     """returns an evil word template of random length, accepting an evil_words_list
-    and choosing the word length that maximizes potential words"""
+    and choosing the word length that maximizes potential words, which it then uses
+    to return a template of that length"""
     max_words_in_length_of = 1
+    word_length_freq = {}
+    for word in evil_words_list:
+        try:
+            word_length_freq[len(word)] += 1
+        except:
+            word_length_freq[len(word)] = 1
+    def get_frequency_value(word_tup):
+        """Given a tuple, returns the second value"""
+        return word_tup[1]
+    max_words_in_length_of = sorted(
+        word_length_freq.items(), key=get_frequency_value, reverse = True)[0][0]
+    print("evil template length", max_words_in_length_of)
     evil_word_template = []
+    for _ in range(max_words_in_length_of+1):
+        evil_word_template.append("_")
     return evil_word_template
 
 # evil mode function
