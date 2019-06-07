@@ -280,6 +280,8 @@ while True:
     try:
         if word_list_str[0].lower() == "f":
             word_file = "fun_words.txt"
+        elif word_list_str == "test":
+            word_file = "test.txt"
     except:
         pass
     game_list = get_word_list(mode_select, file=word_file)
