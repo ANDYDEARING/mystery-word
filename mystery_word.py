@@ -30,7 +30,7 @@ def start_game():
             print("Invalid Entry, try again")
 
 # get a word list for the selected difficulty
-def get_word_list(difficulty_int):
+def get_word_list(difficulty_int, file="words.txt"):
     """Reads from words.txt locally and returns a word list based on 
     difficulty where 1 is 4-6 letters long, 2 is 6-8 letters long,
     and 3 or more is 8 or more letters long"""
@@ -43,7 +43,7 @@ def get_word_list(difficulty_int):
         # (45 at the moment)
         difficulty_range = range(8,100)
     
-    with open("words.txt", "r") as word_file:
+    with open(file, "r") as word_file:
         # add only stripped, lowercase versions of words of legal
         # lengths to the list
         game_word_list = [
@@ -152,7 +152,17 @@ def play_again_query():
 # initialize and run the game till exit
 while True:
     mode_select = (start_game())
-    game_list = get_word_list(mode_select)
+    
+    # anything that starts with an f uses fun_words.txt, otherwise words.txt
+    word_list_str = input("Which word list would you like to use, Fun or School? ")
+    word_file = "words.txt"
+    try:
+        if word_list_str[0].lower() == "f":
+            word_file = "fun_words.txt"
+    except:
+        pass
+    game_list = get_word_list(mode_select, file=word_file)
+
     # if the user is playing on regular, select a random word
     if mode_select < 4:
         play_again = play_game(game_list[random.randrange(len(game_list))])
