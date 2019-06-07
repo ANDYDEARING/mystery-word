@@ -47,7 +47,7 @@ def get_word_list(difficulty_int, file="words.txt"):
                 "What's the maximum letter length you want to try? "))
         except:
             chosen_character_length = 100
-        difficulty_range = range(:chosen_character_length)
+        difficulty_range = range(1,chosen_character_length)
     
     with open(file, "r") as word_file:
         # add only stripped, lowercase versions of words of legal
@@ -150,9 +150,12 @@ def evil_display(mystery_word_template):
     return None
 
 # makes a blank word template for evil mode
-def make_evil_template():
-    """returns an evil word template of random length"""
-    return ["_", "_", "_"]
+def make_evil_template(evil_words_list):
+    """returns an evil word template of random length, accepting an evil_words_list
+    and choosing the word length that maximizes potential words"""
+    max_words_in_length_of = 1
+    evil_word_template = []
+    return evil_word_template
 
 # evil mode function
 def play_evil_mode(evil_words_list):
@@ -160,7 +163,7 @@ def play_evil_mode(evil_words_list):
     # mystery_word_list = []
     # for char in mystery_word:
     #     mystery_word_list.append(char.lower())
-    mystery_word_template = make_evil_template()
+    mystery_word_template = make_evil_template(evil_words_list)
     end_of_game = False
     wrong_answers_remaining = 8
     already_guessed_list = []
