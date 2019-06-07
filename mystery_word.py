@@ -110,7 +110,7 @@ def play_game(mystery_word):
         print("wrong answers left:", wrong_answers_remaining)
         print("letters you've guessed already", already_guessed_list)
         print("")
-        guess = input("Take a guess: ")
+        guess = input("Guess a single letter (a-z): ")
         
         while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
             guess = input("Please guess a single letter (a-z) not already guessed: ")
