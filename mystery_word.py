@@ -9,6 +9,14 @@ def make_string_from_template(template):
         template_str += letter
     return template_str
 
+# make a template from a string
+def make_template_from_string(string):
+    """makes a list of characters given a string and returns it"""
+    new_template = []
+    for letter in string:
+        new_template.append(letter)
+    return new_template
+
 # return the second value of a tuple
 def get_frequency_value(word_tup):
         """Given a tuple, returns the second value"""
@@ -144,15 +152,15 @@ def the_hydra(guess, mystery_template, mystery_words_list):
     new_mystery_template = []
 
     # count the words that do not contain the guess
-    guess_not_in_word_freq = 0
-    for word in mystery_words_list:
-        if guess not in word:
-            guess_not_in_word_freq += 1
+    # guess_not_in_word_freq = 0
+    # for word in mystery_words_list:
+    #     if guess not in word:
+    #         guess_not_in_word_freq += 1
 
     # start a dictionary with frequencies of template compatability
     template_freq = {}
     # add the value of words that do not contain the guess with an index of mystery_template
-    template_freq[make_string_from_template(mystery_template)] = guess_not_in_word_freq
+    template_freq[make_string_from_template(mystery_template)] = 0
 
     # make a dictionary of templates by frequency
     for word in mystery_words_list:
@@ -166,9 +174,9 @@ def the_hydra(guess, mystery_template, mystery_words_list):
     
     # the new mystery template is the template with the highest frequency, which means
     # the highest number of potential words
-    new_mystery_template = sorted(
-        template_freq.items(), key=get_frequency_value, reverse=True)[0][0]
-    
+    new_mystery_template = make_template_from_string(sorted(
+        template_freq.items(), key=get_frequency_value, reverse=True)[0][0])
+
     # if the guess is accepted, new_mystery_words_list is the mystery_words_list 
     # members compatible with the new template
     if mystery_template != new_mystery_template:
