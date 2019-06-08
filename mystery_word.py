@@ -136,9 +136,15 @@ def is_compatible(evil_template_str, word):
     #     word_as_list.append(char)
     if len(evil_template_str) != len(word):
         return False
+    already_used_letters = ""
     for index in range(len(evil_template_str)):
-        if (word[index].upper() != evil_template_str[index].upper()) and (evil_template_str[index] != "_"):
-            compatible = False
+        # keep track of letters checked in the sample word
+        already_used_letters += word[index].upper()
+        # if the letters don't match
+        if (word[index].upper() != evil_template_str[index].upper()):
+            # and if the template has a blank in the corresponding slot that is a letter already checked
+            if (evil_template_str[index] != "_") and (word[index].upper() not in already_used_letters):
+                compatible = False
     return compatible
 
 # "cut off one head, and two more take its place"
