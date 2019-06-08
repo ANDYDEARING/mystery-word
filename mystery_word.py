@@ -1,6 +1,14 @@
 import random
 import os
 
+# make a string from a template for dicitionaries
+def make_string_from_template(template):
+    """takes a template list and returns a string of cap letters and underscores"""
+    template_str = ""
+    for letter in template:
+        template_str += letter
+    return template_str
+
 # return the second value of a tuple
 def get_frequency_value(word_tup):
         """Given a tuple, returns the second value"""
@@ -102,7 +110,6 @@ def the_chimera(guess_list, mystery_list, display=True):
 def evil_win(evil_template):
     """accepts an evil template and checks if it is complete, returning True
     if it is"""
-    breakpoint()
     if "_" in evil_template:
         return False
     else:
@@ -143,17 +150,17 @@ def the_hydra(guess, mystery_template, mystery_words_list):
     # start a dictionary with frequencies of template compatability
     template_freq = {}
     # add the value of words that do not contain the guess with an index of mystery_template
-    template_freq[mystery_template] = guess_not_in_word_freq
+    template_freq[make_string_from_template(mystery_template)] = guess_not_in_word_freq
 
     # make a dictionary of templates by frequency
     for word in mystery_words_list:
         temp_template = make_template(mystery_template, guess, word)
         if guess not in word:
-            template_freq[mystery_template] += 1
-        elif template_freq.get(temp_template) == None:
-            template_freq[temp_template] = 1
+            template_freq[make_string_from_template(mystery_template)] += 1
+        elif template_freq.get(make_string_from_template(temp_template)) == None:
+            template_freq[make_string_from_template(temp_template)] = 1
         else:
-            template_freq[temp_template] += 1
+            template_freq[make_string_from_template(temp_template)] += 1
     
     # the new mystery template is the template with the highest frequency, which means
     # the highest number of potential words
