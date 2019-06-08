@@ -51,6 +51,8 @@ def get_word_list(difficulty_int, file="words.txt"):
         difficulty_range = range(4,7)
     elif difficulty_int == 2:
         difficulty_range = range(6,9)
+    elif difficulty_int == 3:
+        difficulty_range = range(8,100)
     else:
         # evil mode prompt
         print("Feeling brave I see...")
@@ -116,17 +118,18 @@ def evil_win(evil_template):
         return True
 
 # check to see if a template is compatible with a word
-def is_compatible(evil_template, word):
-    """accepts a template and a string word, returning a boolean that
-    says True if they're compatible and False if they're not"""
+def is_compatible(evil_template_str, word):
+    """accepts a template converted to a string and a string word, 
+    returning a boolean that says True if they're compatible and 
+    False if they're not"""
     compatible = True
-    word_as_list = []
-    for char in word:
-        word_as_list.append(char)
-    if len(evil_template) != len(word_as_list):
+    # word_as_list = []
+    # for char in word:
+    #     word_as_list.append(char)
+    if len(evil_template_str) != len(word):
         return False
-    for index in range(len(evil_template)):
-        if (word_as_list[index] != evil_template[index]) and (evil_template[index] != "_"):
+    for index in range(len(evil_template_str)):
+        if (word[index].upper() != evil_template_str[index].upper()) and (evil_template_str[index] != "_"):
             compatible = False
     return compatible
 
