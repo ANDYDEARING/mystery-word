@@ -137,9 +137,8 @@ def is_compatible(evil_template_str, word):
 # this is the equivalent of the_chimera for evil mode
 def the_hydra(guess, mystery_template, mystery_words_list):
     """accepts the latest guess, the mystery_template, and mystery_words_list,
-    returning a new mystery_template, new mystery_words_list, and the
-    number of words eliminated on that step. Logic is to maximize remaining 
-    words, given a guess."""
+    returning a new mystery_template, new mystery_words_list, and the number 
+    of words eliminated on that step. Logic is to maximize remaining words, given a guess."""
     number_of_words_eliminated = 0
     new_mystery_words_list = []
     new_mystery_template = []
@@ -170,10 +169,17 @@ def the_hydra(guess, mystery_template, mystery_words_list):
     new_mystery_template = sorted(
         template_freq.items(), key=get_frequency_value, reverse=True)[0][0]
     
-    # new_mystery_words_list is the mystery_words_list members compatible with the new template
-    for word in mystery_words_list:
-        if is_compatible(new_mystery_template, word):
-            new_mystery_words_list.append(word)
+    # if the guess is accepted, new_mystery_words_list is the mystery_words_list 
+    # members compatible with the new template
+    if mystery_template != new_mystery_template:
+        for word in mystery_words_list:
+            if is_compatible(new_mystery_template, word):
+                new_mystery_words_list.append(word)
+    # otherwise add all words to the new list not containing the guess
+    else:
+        for word in mystery_words_list:
+            if not guess.upper() in word.upper():
+                new_mystery_words_list.append(word)
     
     number_of_words_eliminated = len(mystery_words_list) - len(new_mystery_words_list)
     return new_mystery_template, new_mystery_words_list, number_of_words_eliminated
@@ -309,10 +315,10 @@ def play_evil_mode(evil_words_list):
         while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
             guess = input("Please guess a single letter (a-z) not already guessed: ")
         guess = guess.lower()
-        already_guessed_list.append(guess)
         mystery_word_template, remaining_mystery_words, words_eliminated = the_hydra(
             guess, mystery_word_template, remaining_mystery_words)
         
+        already_guessed_list.append(guess)
         if evil_win(mystery_word_template):
             end_of_game = True
             evil_display(mystery_word_template)
@@ -323,7 +329,7 @@ def play_evil_mode(evil_words_list):
             print("\a")
             wrong_answers_remaining -= 1
             if wrong_answers_remaining == 0:
-                print("You never had a chance. The word was", remaining_mystery_words[0], "!")
+                print("You never had a chance. The word was", remaining_mystery_words[0].upper(), "!")
                 end_of_game = True
     return play_again_query()
 
