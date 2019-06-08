@@ -97,6 +97,7 @@ def the_chimera(guess_list, mystery_list, display=True):
 def evil_win(evil_template):
     """accepts an evil template and checks if it is complete, returning True
     if it is"""
+    breakpoint()
     if "_" in evil_template:
         return False
     else:
@@ -125,8 +126,41 @@ def the_hydra(guess, mystery_template, mystery_words_list):
     number of words eliminated on that step. Logic is to maximize remaining 
     words, given a guess."""
     number_of_words_eliminated = 0
+    new_mystery_words_list = []
+    new_mystery_template = []
 
-    return mystery_template, mystery_words_list, number_of_words_eliminated
+    # count the words that do not contain the guess
+    guess_not_in_word_freq = 0
+    for word in mystery_words_list:
+        if guess not in word:
+            guess_not_in_word_freq += 1
+
+    # start a dictionary with frequencies of template compatability
+    template_freq = {}
+    # add the value of words that do not contain the guess with an index of mystery_template
+    template_freq[mystery_template] = guess_not_in_word_freq
+    
+    for word in mystery_words_list:
+        if guess not in word:
+            template_freq[mystery_template] += 1
+        elif 
+    
+    if (guess_not_in_word_freq >= 0) or (len(mystery_words_list) == 1):
+        # accept the guess and select which template will yield the maximum
+        # remaining words, then remove items from the list that don't fit
+        # that template. Also, if there's only one word left, the guess must 
+        # be accepted.
+        pass
+    else:
+        # reject the guess and change the mystery_word_list to eliminate words 
+        # that contain that letter
+        for word in mystery_words_list:
+            if not guess in word:
+                new_mystery_words_list.append(word)
+        new_mystery_template = mystery_template
+    
+    number_of_words_eliminated = len(mystery_words_list) - len(new_mystery_words_list)
+    return new_mystery_template, new_mystery_words_list, number_of_words_eliminated
 
 # main game function
 def play_game(mystery_word):
@@ -180,7 +214,7 @@ def evil_display(mystery_word_template):
     return None
 
 # makes a blank word template for evil mode
-def make_evil_template(evil_words_list):
+def make_init_evil_template(evil_words_list):
     """returns an evil word template of random length, accepting an evil_words_list
     and choosing the word length that maximizes potential words, which it then uses
     to return a template of that length"""
@@ -210,6 +244,25 @@ def make_evil_template(evil_words_list):
         evil_word_template.append("_")
     return evil_word_template
 
+# makes a new template based on an existing template, a letter, and a word
+def make_template(old_template, guess_letter, word):
+    """accepts a template, a letter, and a potential word sring of the same length
+    and returns a new template that updates the old_template with changes, if any"""
+    # converts the string word into a list of characters
+    word_list = []
+    for letter in word:
+        word_list.append(letter)
+    
+    # makes a template using either the existing character or the letter if matched
+    new_template = []
+    for index in range(len(old_template)):
+        if word_list[index].upper() == guess_letter.upper():
+            new_template.append(guess_letter.upper())
+        else:
+            new_template.append(old_template[index])
+    return new_template
+
+
 # eliminate all members of a list that are not the passed length
 def trunc_evil_list(evil_words_list, length):
     """accepts a word_list and a length, returning a new list of items
@@ -223,7 +276,8 @@ def trunc_evil_list(evil_words_list, length):
 # evil mode function
 def play_evil_mode(evil_words_list):
     """plays the evil mode of mystery word, returns bool play_again"""
-    mystery_word_template = make_evil_template(evil_words_list)
+    mystery_word_template = make_init_evil_template(evil_words_list)
+    breakpoint()
     end_of_game = False
     wrong_answers_remaining = 8
     already_guessed_list = []
