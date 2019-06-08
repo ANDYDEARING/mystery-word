@@ -1,6 +1,11 @@
 import random
 import os
 
+# return the second value of a tuple
+def get_frequency_value(word_tup):
+        """Given a tuple, returns the second value"""
+        return word_tup[1]
+
 # function to start game
 def start_game():
     """Starts the game by asking user for the desired mode and returns
@@ -139,25 +144,26 @@ def the_hydra(guess, mystery_template, mystery_words_list):
     template_freq = {}
     # add the value of words that do not contain the guess with an index of mystery_template
     template_freq[mystery_template] = guess_not_in_word_freq
-    
+
+    # make a dictionary of templates by frequency
     for word in mystery_words_list:
+        temp_template = make_template(mystery_template, guess, word)
         if guess not in word:
             template_freq[mystery_template] += 1
-        elif 
+        elif template_freq.get(temp_template) == None:
+            template_freq[temp_template] = 1
+        else:
+            template_freq[temp_template] += 1
     
-    if (guess_not_in_word_freq >= 0) or (len(mystery_words_list) == 1):
-        # accept the guess and select which template will yield the maximum
-        # remaining words, then remove items from the list that don't fit
-        # that template. Also, if there's only one word left, the guess must 
-        # be accepted.
-        pass
-    else:
-        # reject the guess and change the mystery_word_list to eliminate words 
-        # that contain that letter
-        for word in mystery_words_list:
-            if not guess in word:
-                new_mystery_words_list.append(word)
-        new_mystery_template = mystery_template
+    # the new mystery template is the template with the highest frequency, which means
+    # the highest number of potential words
+    new_mystery_template = sorted(
+        template_freq.items(), key=get_frequency_value, reverse=True)[0][0]
+    
+    # new_mystery_words_list is the mystery_words_list members compatible with the new template
+    for word in mystery_words_list:
+        if is_compatible(new_mystery_template, word):
+            new_mystery_words_list.append(word)
     
     number_of_words_eliminated = len(mystery_words_list) - len(new_mystery_words_list)
     return new_mystery_template, new_mystery_words_list, number_of_words_eliminated
@@ -231,10 +237,6 @@ def make_init_evil_template(evil_words_list):
         except:
             word_length_freq[len(word)] = 1
     
-    def get_frequency_value(word_tup):
-        """Given a tuple, returns the second value"""
-        return word_tup[1]
-    
     max_words_in_length_of = sorted(
         word_length_freq.items(), key=get_frequency_value, reverse = True)[0][0]
     
@@ -277,7 +279,6 @@ def trunc_evil_list(evil_words_list, length):
 def play_evil_mode(evil_words_list):
     """plays the evil mode of mystery word, returns bool play_again"""
     mystery_word_template = make_init_evil_template(evil_words_list)
-    breakpoint()
     end_of_game = False
     wrong_answers_remaining = 8
     already_guessed_list = []
