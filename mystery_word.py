@@ -334,7 +334,7 @@ def play_evil_mode(evil_words_list):
     mystery_word_template = make_init_evil_template(evil_words_list)
     end_of_game = False
     try:
-        wrong_answers_remaining = int(input("How many wrong guesses do you want? "))
+        wrong_answers_remaining = int(input("How many wrong guesses shall I allow? "))
     except:
         wrong_answers_remaining = 8
     already_guessed_list = []
