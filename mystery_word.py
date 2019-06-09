@@ -60,6 +60,7 @@ def get_word_list(difficulty_int, file="words.txt"):
     elif difficulty_int == 2:
         difficulty_range = range(6,9)
     elif difficulty_int == 3:
+        # 100 is far longer than the longest english word at the time of writing
         difficulty_range = range(8,100)
     else:
         # evil mode prompt
@@ -70,6 +71,7 @@ def get_word_list(difficulty_int, file="words.txt"):
                 "What's the maximum letter length you want to try? "))
         except:
             chosen_character_length = 100
+        # have to add one because range() is exclusive on the second value
         difficulty_range = range(1,chosen_character_length+1)
     
     with open(file, "r") as word_file:
@@ -91,6 +93,8 @@ def the_chimera(guess_list, mystery_list, display=True):
     printing the line if display=True, and returning the updated
     mystery_list a boolean of game_won"""
 
+    # makes a new list where guessed letters are uppercase, otherwise 
+    # appends the lowercase version
     new_mystery_list = []
     for letter in mystery_list:
         if letter in guess_list:
@@ -98,16 +102,22 @@ def the_chimera(guess_list, mystery_list, display=True):
         else:
             new_mystery_list.append(letter)
 
+    # initialize values
     display_list = []
     game_won = False
 
+    # make a display list that has only blanks and guessed uppercase letters
     for letter in new_mystery_list:
         if letter == letter.upper():
             display_list.append(letter)
         else:
             display_list.append("_")
+
+    # if there's no blanks, the game is won
     if "_" not in display_list:
         game_won = True
+
+    # display the string if applicable
     if display == True:
         display_str = ""
         for letter in display_list:
@@ -153,9 +163,12 @@ def the_hydra(guess, mystery_template, mystery_words_list):
     """accepts the latest guess, the mystery_template, and mystery_words_list,
     returning a new mystery_template, new mystery_words_list, and the number 
     of words eliminated on that step. Logic is to maximize remaining words, given a guess."""
+
+    # initialize values
     number_of_words_eliminated = 0
     new_mystery_words_list = []
     new_mystery_template = []
+
     # start a dictionary with frequencies of template compatability
     template_freq = {}
 
@@ -173,7 +186,7 @@ def the_hydra(guess, mystery_template, mystery_words_list):
             template_freq[make_string_from_template(temp_template)] += 1
     
     # the new mystery template is the template with the highest frequency, which means
-    # the highest number of potential words
+    # the highest number of potential words from the available choices
     new_mystery_template = make_template_from_string(sorted(
         template_freq.items(), key=get_frequency_value, reverse=True)[0][0])
 
@@ -183,12 +196,14 @@ def the_hydra(guess, mystery_template, mystery_words_list):
         for word in mystery_words_list:
             if is_compatible(new_mystery_template, word):
                 new_mystery_words_list.append(word)
+
     # otherwise add all words to the new list not containing the guess
     else:
         for word in mystery_words_list:
             if not guess.upper() in word.upper():
                 new_mystery_words_list.append(word)
     number_of_words_eliminated = len(mystery_words_list) - len(new_mystery_words_list)
+
     return new_mystery_template, new_mystery_words_list, number_of_words_eliminated
 
 # main game function
@@ -196,15 +211,17 @@ def play_game(mystery_word):
     """plays a game of mystery word, accepting a string of the mystery word,
      returns bool play_again"""
     
+    # make a list of lower case letters to represent the word
     mystery_word_list = []
     for char in mystery_word:
         mystery_word_list.append(char.lower())
     
-    # print("DEBUG", mystery_word_list)
-
+    # initialize values
     end_of_game = False
     wrong_answers_remaining = 8
     already_guessed_list = []
+
+    # keep playing the game till it's over
     while not end_of_game:
         os.system("clear")
         print("")
@@ -215,16 +232,20 @@ def play_game(mystery_word):
         print("")
         guess = input("Guess a single letter (a-z): ")
         
+        # make sure the input is valid and don't charge an incorrect guess for a repeated letter
         while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
             guess = input("Please guess a single letter (a-z) not already guessed: ")
         guess = guess.lower()
         already_guessed_list.append(guess)
+
+        # if the guess is in the mystery word, check the_chimera
         if guess in mystery_word_list:
             mystery_word_list, end_of_game = the_chimera(already_guessed_list, mystery_word_list, display=False)
-            # print(mystery_word_list, "in main")
             if end_of_game:
                 the_chimera(already_guessed_list, mystery_word_list, display=True)
                 print("YOU WIN!")
+
+        # otherwise make a sound abd subtract a worng answer remaining
         else:
             print("\a")
             wrong_answers_remaining -= 1
@@ -287,7 +308,6 @@ def make_template_from_word(old_template, guess_letter, word):
             new_template.append(old_template[index].upper())
     return new_template
 
-
 # eliminate all members of a list that are not the passed length
 def trunc_evil_list(evil_words_list, length):
     """accepts a word_list and a length, returning a new list of items
@@ -301,13 +321,18 @@ def trunc_evil_list(evil_words_list, length):
 # evil mode function
 def play_evil_mode(evil_words_list):
     """plays the evil mode of mystery word, returns bool play_again"""
+
+    # initialize the values
     mystery_word_template = make_init_evil_template(evil_words_list)
     end_of_game = False
-    # testing use 26 for algorithm
-    wrong_answers_remaining = 8
+    wrong_answers_remaining = 8 # to test the algorithm, use 26 worng answers
     already_guessed_list = []
     words_eliminated = 0
+    # truncate the list of potential words to only those with the same length as
+    # the mystery template
     remaining_mystery_words = trunc_evil_list(evil_words_list, len(mystery_word_template))
+
+    # play the game till it's over
     while not end_of_game:
         os.system("clear")
         print("")
@@ -316,29 +341,44 @@ def play_evil_mode(evil_words_list):
         print("wrong answers left:", wrong_answers_remaining)
         print("letters you've guessed already", already_guessed_list)
         print("")
+        # tracks the evil algorithm for the user
         print("Evil mode console:", len(remaining_mystery_words), "words remaining.")
         print(words_eliminated, "words eliminated on previous step.")
         print("")
         guess = input("Guess a single letter (a-z): ")
+
+        # validate input
         while (not guess.isalpha()) or (len(guess) != 1) or (guess in already_guessed_list):
             guess = input("Please guess a single letter (a-z) not already guessed: ")
         guess = guess.lower()
+
+        # consult the_hydra for the new template and word list as well as finding out
+        # how many words were eliminated
         mystery_word_template, remaining_mystery_words, words_eliminated = the_hydra(
             guess, mystery_word_template, remaining_mystery_words)
         
+        # append the guess after the_hydra's computation
         already_guessed_list.append(guess)
+
+        # yeah, right, like you'll win outside of testing :)
         if evil_win(mystery_word_template):
             end_of_game = True
             evil_display(mystery_word_template)
             print("YOU BEAT ME!!!")
             print("THAT'S IMPOSSIBLE!!!")
             print("NOOOOOOOOO!!!!!")
+
+        # loss condition, prints the first word in the potential list, like
+        # that was the word the while time :)
         elif guess.upper() not in mystery_word_template:
+            # plays a beep sound
             print("\a")
             wrong_answers_remaining -= 1
             if wrong_answers_remaining == 0:
                 print("You never had a chance. The word was", remaining_mystery_words[0].upper(), "!")
                 end_of_game = True
+    
+    # ask the user if they want to play again
     return play_again_query()
 
 # play again function
@@ -363,8 +403,10 @@ while True:
     word_list_str = input("Which word list would you like to use, Fun or School? ")
     word_file = "words.txt"
     try:
+        # fun_words is the 3000 most used words in English, for a more fun user experience
         if word_list_str[0].lower() == "f":
             word_file = "fun_words.txt"
+        # secret response specifically for testing
         elif word_list_str == "test":
             word_file = "test.txt"
     except:
