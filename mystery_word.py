@@ -163,7 +163,6 @@ def is_compatible(evil_template_str, word):
                 compatible = False
     return compatible
 
-
 # "cut off one head, and two more take its place"
 # this is the equivalent of the_chimera for evil mode
 def the_hydra(guess, mystery_template, mystery_words_list):
@@ -334,7 +333,10 @@ def play_evil_mode(evil_words_list):
     # initialize the values
     mystery_word_template = make_init_evil_template(evil_words_list)
     end_of_game = False
-    wrong_answers_remaining = 26 # for testing the algorithm, use 26 worng answers
+    try:
+        wrong_answers_remaining = int(input("How many wrong guesses do you want? "))
+    except:
+        wrong_answers_remaining = 8
     already_guessed_list = []
     words_eliminated = 0
     # truncate the list of potential words to only those with the same length as
