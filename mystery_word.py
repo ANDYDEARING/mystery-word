@@ -303,6 +303,7 @@ def play_evil_mode(evil_words_list):
     """plays the evil mode of mystery word, returns bool play_again"""
     mystery_word_template = make_init_evil_template(evil_words_list)
     end_of_game = False
+    # testing use 26 for algorithm
     wrong_answers_remaining = 8
     already_guessed_list = []
     words_eliminated = 0
