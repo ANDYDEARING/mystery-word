@@ -14,7 +14,7 @@ def make_template_from_string(string):
     """makes a list of characters given a string and returns it"""
     new_template = []
     for letter in string:
-        new_template.append(letter)
+        new_template.append(letter.upper())
     return new_template
 
 # return the second value of a tuple
@@ -131,9 +131,6 @@ def is_compatible(evil_template_str, word):
     returning a boolean that says True if they're compatible and 
     False if they're not"""
     compatible = True
-    # word_as_list = []
-    # for char in word:
-    #     word_as_list.append(char)
     if len(evil_template_str) != len(word):
         return False
     already_used_letters = ""
@@ -142,7 +139,10 @@ def is_compatible(evil_template_str, word):
         already_used_letters += word[index].upper()
         # if the letters don't match
         if (word[index].upper() != evil_template_str[index].upper()):
-            # and if the template has a blank in the corresponding slot that is a letter already checked
+            # and the template is not blank in that position
+            if evil_template_str[index] != "_":
+                compatible = False
+            # or if the template has a blank in the corresponding slot that is a letter already checked
             if (evil_template_str[index] != "_") and (word[index].upper() not in already_used_letters):
                 compatible = False
     return compatible
@@ -156,21 +156,15 @@ def the_hydra(guess, mystery_template, mystery_words_list):
     number_of_words_eliminated = 0
     new_mystery_words_list = []
     new_mystery_template = []
-
-    # count the words that do not contain the guess
-    # guess_not_in_word_freq = 0
-    # for word in mystery_words_list:
-    #     if guess not in word:
-    #         guess_not_in_word_freq += 1
-
     # start a dictionary with frequencies of template compatability
     template_freq = {}
-    # add the value of words that do not contain the guess with an index of mystery_template
+
+    # add the value for words that do not contain the guess with an index of mystery_template
     template_freq[make_string_from_template(mystery_template)] = 0
 
     # make a dictionary of templates by frequency
     for word in mystery_words_list:
-        temp_template = make_template(mystery_template, guess, word)
+        temp_template = make_template_from_word(mystery_template, guess, word)
         if guess not in word:
             template_freq[make_string_from_template(mystery_template)] += 1
         elif template_freq.get(make_string_from_template(temp_template)) == None:
@@ -194,7 +188,6 @@ def the_hydra(guess, mystery_template, mystery_words_list):
         for word in mystery_words_list:
             if not guess.upper() in word.upper():
                 new_mystery_words_list.append(word)
-    
     number_of_words_eliminated = len(mystery_words_list) - len(new_mystery_words_list)
     return new_mystery_template, new_mystery_words_list, number_of_words_eliminated
 
@@ -277,7 +270,7 @@ def make_init_evil_template(evil_words_list):
     return evil_word_template
 
 # makes a new template based on an existing template, a letter, and a word
-def make_template(old_template, guess_letter, word):
+def make_template_from_word(old_template, guess_letter, word):
     """accepts a template, a letter, and a potential word sring of the same length
     and returns a new template that updates the old_template with changes, if any"""
     # converts the string word into a list of characters
@@ -291,7 +284,7 @@ def make_template(old_template, guess_letter, word):
         if word_list[index].upper() == guess_letter.upper():
             new_template.append(guess_letter.upper())
         else:
-            new_template.append(old_template[index])
+            new_template.append(old_template[index].upper())
     return new_template
 
 
@@ -339,10 +332,11 @@ def play_evil_mode(evil_words_list):
             print("YOU BEAT ME!!!")
             print("THAT'S IMPOSSIBLE!!!")
             print("NOOOOOOOOO!!!!!")
-        else:
+        elif guess.upper() not in mystery_word_template:
             print("\a")
             wrong_answers_remaining -= 1
             if wrong_answers_remaining == 0:
+                breakpoint()
                 print("You never had a chance. The word was", remaining_mystery_words[0].upper(), "!")
                 end_of_game = True
     return play_again_query()
