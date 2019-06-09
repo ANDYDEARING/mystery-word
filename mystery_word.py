@@ -140,22 +140,50 @@ def is_compatible(evil_template_str, word):
     """accepts a template converted to a string and a string word, 
     returning a boolean that says True if they're compatible and 
     False if they're not"""
+    # compatible = True
+    # if len(evil_template_str) != len(word):
+    #     return False
+    
+    # already_used_letters = ""
+    # # sabianism fix?
+    # for letter in evil_template_str:
+    #     if letter != "_":
+    #         already_used_letters += letter.upper()
+
+    # for index in range(len(evil_template_str)):
+    #     # keep track of letters checked in the sample word
+    #     already_used_letters += word[index].upper()
+    #     # if the letters don't match
+    #     if (word[index].upper() != evil_template_str[index].upper()):
+    #         # and the template is not blank in that position
+    #         if evil_template_str[index] != "_":
+    #             compatible = False
+    #         # or if the template has a blank in the corresponding slot that is a letter already checked
+    #         if (evil_template_str[index] == "_") and (word[index].upper() in already_used_letters):
+    #             compatible = False
+    # return compatible
+
     compatible = True
     if len(evil_template_str) != len(word):
-        return False
-    already_used_letters = ""
+        compatible = False
+
+    # record which letters are in the template
+    template_letters = ""
+    for letter in evil_template_str:
+        if letter != "_":
+            template_letters += letter.upper()
+
     for index in range(len(evil_template_str)):
-        # keep track of letters checked in the sample word
-        already_used_letters += word[index].upper()
-        # if the letters don't match
+        # if a letter of the word has been guessed and is not represented in the template
+        if (word[index].upper() in template_letters) and (evil_template_str[index] == "_"):
+            compatible = False
+        # or if the letters don't match
         if (word[index].upper() != evil_template_str[index].upper()):
             # and the template is not blank in that position
             if evil_template_str[index] != "_":
                 compatible = False
-            # or if the template has a blank in the corresponding slot that is a letter already checked
-            if (evil_template_str[index] != "_") and (word[index].upper() not in already_used_letters):
-                compatible = False
     return compatible
+
 
 # "cut off one head, and two more take its place"
 # this is the equivalent of the_chimera for evil mode
@@ -178,12 +206,13 @@ def the_hydra(guess, mystery_template, mystery_words_list):
     # make a dictionary of templates by frequency
     for word in mystery_words_list:
         temp_template = make_template_from_word(mystery_template, guess, word)
-        if guess not in word:
-            template_freq[make_string_from_template(mystery_template)] += 1
-        elif template_freq.get(make_string_from_template(temp_template)) == None:
-            template_freq[make_string_from_template(temp_template)] = 1
-        else:
-            template_freq[make_string_from_template(temp_template)] += 1
+        if is_compatible(make_string_from_template(temp_template), word):
+            if guess not in word:
+                template_freq[make_string_from_template(mystery_template)] += 1
+            elif template_freq.get(make_string_from_template(temp_template)) == None:
+                template_freq[make_string_from_template(temp_template)] = 1
+            else:
+                template_freq[make_string_from_template(temp_template)] += 1
     
     # the new mystery template is the template with the highest frequency, which means
     # the highest number of potential words from the available choices
@@ -203,7 +232,8 @@ def the_hydra(guess, mystery_template, mystery_words_list):
             if not guess.upper() in word.upper():
                 new_mystery_words_list.append(word)
     number_of_words_eliminated = len(mystery_words_list) - len(new_mystery_words_list)
-
+    if(len(new_mystery_words_list) == 0):
+        breakpoint()
     return new_mystery_template, new_mystery_words_list, number_of_words_eliminated
 
 # main game function
@@ -325,7 +355,7 @@ def play_evil_mode(evil_words_list):
     # initialize the values
     mystery_word_template = make_init_evil_template(evil_words_list)
     end_of_game = False
-    wrong_answers_remaining = 8 # to test the algorithm, use 26 worng answers
+    wrong_answers_remaining = 26 # for testing the algorithm, use 26 worng answers
     already_guessed_list = []
     words_eliminated = 0
     # truncate the list of potential words to only those with the same length as
@@ -398,7 +428,6 @@ def play_again_query():
 # initialize and run the game till exit
 while True:
     mode_select = (start_game())
-
     # anything that starts with an f or F uses fun_words.txt, otherwise words.txt
     word_list_str = input("Which word list would you like to use, Fun or School? ")
     word_file = "words.txt"
