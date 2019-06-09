@@ -140,29 +140,8 @@ def is_compatible(evil_template_str, word):
     """accepts a template converted to a string and a string word, 
     returning a boolean that says True if they're compatible and 
     False if they're not"""
-    # compatible = True
-    # if len(evil_template_str) != len(word):
-    #     return False
     
-    # already_used_letters = ""
-    # # sabianism fix?
-    # for letter in evil_template_str:
-    #     if letter != "_":
-    #         already_used_letters += letter.upper()
-
-    # for index in range(len(evil_template_str)):
-    #     # keep track of letters checked in the sample word
-    #     already_used_letters += word[index].upper()
-    #     # if the letters don't match
-    #     if (word[index].upper() != evil_template_str[index].upper()):
-    #         # and the template is not blank in that position
-    #         if evil_template_str[index] != "_":
-    #             compatible = False
-    #         # or if the template has a blank in the corresponding slot that is a letter already checked
-    #         if (evil_template_str[index] == "_") and (word[index].upper() in already_used_letters):
-    #             compatible = False
-    # return compatible
-
+    # if they're not the same length, they're not compatible
     compatible = True
     if len(evil_template_str) != len(word):
         compatible = False
