@@ -11,7 +11,7 @@ def make_string_from_template(template):
 
 # make a template from a string
 def make_template_from_string(string):
-    """makes a list of characters given a string and returns it"""
+    """makes a list of upper characters given a string and returns it"""
     new_template = []
     for letter in string:
         new_template.append(letter.upper())
@@ -337,7 +337,6 @@ def play_evil_mode(evil_words_list):
             print("\a")
             wrong_answers_remaining -= 1
             if wrong_answers_remaining == 0:
-                breakpoint()
                 print("You never had a chance. The word was", remaining_mystery_words[0].upper(), "!")
                 end_of_game = True
     return play_again_query()
@@ -372,13 +371,17 @@ while True:
         pass
     game_list = get_word_list(mode_select, file=word_file)
 
-    # if the user is playing on regular, select a random word
-    if mode_select < 4:
-        play_again = play_game(game_list[random.randrange(len(game_list))])
-        if not play_again:
-            exit()
-    # if the user is playing on evil mode, pass the list of potential words
-    elif mode_select == 4:
-        play_again = play_evil_mode(game_list)
-        if not play_again:
-            exit()
+    # as long as there are eligible words
+    if len(game_list) > 0:
+        # if the user is playing on regular, select a random word
+        if mode_select < 4:
+            play_again = play_game(game_list[random.randrange(len(game_list))])
+            if not play_again:
+                exit()
+        # if the user is playing on evil mode, pass the list of potential words
+        elif mode_select == 4:
+            play_again = play_evil_mode(game_list)
+            if not play_again:
+                exit()
+    else:
+        input("No eligible words. Press Enter to choose different parameters.")
